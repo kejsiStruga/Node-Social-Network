@@ -1,0 +1,19 @@
+{
+  "name": "node-social-network",
+  "version": "1.0.0",
+  "description": "Node Story-Book Social Network ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kejsiStruga/Node-Social-Network.git"
+  },
+  "author": "Kejsi Struga",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kejsiStruga/Node-Social-Network/issues"
+  },
+  "homepage": "https://github.com/kejsiStruga/Node-Social-Network#readme"
+}

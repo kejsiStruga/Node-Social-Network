@@ -1,10 +1,13 @@
 const express = require('express');
+const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const passport = require('passport');
+const jquery = require('jquery');
+
 const app = express();
 const port = process.env.PORT || 5000;
-const expressSession = require('express-session');
-const cookieParser = require('cookie-parser');
-const passport = require('passport');
 
 // Load user model; this line ShOULD be placed ahead of Passport load
 require('./models/users');
@@ -16,7 +19,8 @@ require('./config/passport')(passport);
 const keys = require('./config/keys');
 
 // Load Routes
-const auth = require('./routes/auth')
+const index = require('./routes/index');
+const auth = require('./routes/auth');
 
 // Global Promise map
 mongoose.Promise = global.Promise;
@@ -26,40 +30,38 @@ mongoose.connect(keys.mongoURI)
 	.then(() => console.log('MongoDB Connected'))
 	.catch(error => console.log('error: ',error));
 
-
-app.get('/', (req, res) => {
-	res.send('Working Node')
-});
+// Handlebars Middleware
+app.engine('handlebars', exphbs({
+	defaultLayout: 'main'
+}));
+app.set('view engine', 'handlebars');
 
 app.use(cookieParser());
-
-app.use(expressSession({
-	secret: 'secret',
-	resave: false,
-	saveUninitialized: false
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false
 }));
 
 // Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Use routes; Should be below the usage of cookieParse, expressSession and passport middleware initilization
-app.use('/auth', auth);
-
 // Setting global variables; So that user dont have to login every time we restart the server only when they logout
 app.use((req, res, next) => {
-	req.locals.user = req.user || null;
+	res.locals.user = req.user || null;
+	res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 	next();
-})
+});
+
+// Use Routes
+app.use('/', index);
+app.use('/auth', auth);
 
 app.listen(port, () => {
 	console.log(`Server started on port ${port}`)
 });
 
-
-
-
-// Google authentication + logout
 
 
 

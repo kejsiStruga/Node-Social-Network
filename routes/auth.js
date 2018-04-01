@@ -9,10 +9,10 @@ router.get('/google', passport.authenticate('google', {
 	scope: ['profile', 'email'] // what to share from user; the scope of what we want to request for the user to authentiacet
 }));
 
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }) ,
-	(req,res) => {
-		res.redirect('/dashboard')
-	});
+router.get('/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/' }),(req, res) => {
+    res.redirect('/dashboard');
+  });
 
 router.get('/verify', (req,res) => {
 	if(req.user) {
@@ -22,9 +22,11 @@ router.get('/verify', (req,res) => {
 	}
 });
 
-router.get('/logout', (req,res) => {
-	req.logout();
-	res.redirect('/');
-})
-
+router.get('/logout', function(req, res) {
+    req.session.destroy(function(e){
+        req.logout();
+        res.redirect('/');
+    });
+});
+   
 module.exports = router;

@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const jquery = require('jquery');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ const keys = require('./config/keys');
 // Load Routes
 const index = require('./routes/index');
 const auth = require('./routes/auth');
+const papers = require('./routes/papers');
 
 // Global Promise map
 mongoose.Promise = global.Promise;
@@ -50,13 +52,17 @@ app.use(passport.session());
 // Setting global variables; So that user dont have to login every time we restart the server only when they logout
 app.use((req, res, next) => {
 	res.locals.user = req.user || null;
-	res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+//	res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 	next();
 });
+
+// Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Use Routes
 app.use('/', index);
 app.use('/auth', auth);
+app.use('/papers', papers);
 
 app.listen(port, () => {
 	console.log(`Server started on port ${port}`)

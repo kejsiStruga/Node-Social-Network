@@ -6,18 +6,33 @@ const session = require('express-session');
 const passport = require('passport');
 const jquery = require('jquery');
 const path = require('path');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 
 const app = express();
 const port = process.env.PORT || 5000;
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 // Load user model; this line ShOULD be placed ahead of Passport load
 require('./models/users');
-
+require('./models/papers');
 // Passport Config
 require('./config/passport')(passport);
 
+// Method override - Perform Post and Delete directly from HTML 
+app.use(methodOverride('_method'));
+
 // Load Keys
 const keys = require('./config/keys');
+
+// Handlebars Helpers, which should be applied to the middleware
+const {
+	truncate,
+	stripTags,
+	formatDate,
+	select
+} = require('./helpers/hbs');
 
 // Load Routes
 const index = require('./routes/index');
@@ -34,6 +49,12 @@ mongoose.connect(keys.mongoURI)
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
+	helpers: {
+		truncate: truncate,
+		stripTags: stripTags,
+		formatDate: formatDate,
+		select
+	},
 	defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');

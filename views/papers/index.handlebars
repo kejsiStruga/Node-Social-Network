@@ -1,1 +1,30 @@
  {{!-- Papers is an entity => we need the whole crud views --}}
+<h1>Papers</h1>
+<div class="row">
+    {{#each papers}}
+        <div class="col s12 m4">
+            <div class="card">
+                <div class="card-image">
+                    <a href="/papers/edit/{{id}}" class="btn-floating halfway-fab red">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                </div>
+                <div class="card-content center-align">
+                    <h5>{{title}}</h5>
+                    <p class="paper-text">{{ stripTags (truncate body 150)}}</p>
+                    <br>
+                    <div class="chip">
+                        <img src="{{user.image}}" alt="Contact Person">
+                        {{user.firstName}} {{user.lastName}}
+                    </div>
+                </div>
+
+                <div class="card-action center-align">
+                    <a class="btn grey" href="/papers/show/{{id}}">Read More</a>
+                </div>
+            </div>
+        </div>
+    {{else}}
+    <p>No Papers Found</p>
+    {{/each}}
+</div>

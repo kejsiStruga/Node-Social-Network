@@ -26,10 +26,17 @@
   crossorigin="anonymous">
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="https://cdn.ckeditor.com/4.9.1/standard/ckeditor.js"></script>
   <script>
     $(document).ready(() => {
       $('.button-collapse').sideNav();
+      $('select').material_select();
     });
+  // WYSWUG
+  // Use CKEditor for creating a paragraph tag when user enters the story on the textarea
+    CKEDITOR.replace('body', {
+      plugins: 'wysiwygarea,toolbar,basicstyles,link'
+    }); // body is the name of the textarea => we will get a full editor
   </script>
 </body>
 </html>

@@ -1,27 +1,24 @@
 const express = require('express');
+const path = require('path');
 const exphbs = require('express-handlebars');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
-const jquery = require('jquery');
-const path = require('path');
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
-
-const app = express();
-const port = process.env.PORT || 5000;
-app.use(bodyParser.urlencoded());
-app.use(bodyParser.json());
 
 // Load user model; this line ShOULD be placed ahead of Passport load
 require('./models/users');
 require('./models/papers');
+
 // Passport Config
 require('./config/passport')(passport);
 
-// Method override - Perform Post and Delete directly from HTML 
-app.use(methodOverride('_method'));
+// Load Routes
+const index = require('./routes/index');
+const auth = require('./routes/auth');
+const papers = require('./routes/papers');
 
 // Load Keys
 const keys = require('./config/keys');
@@ -31,13 +28,9 @@ const {
 	truncate,
 	stripTags,
 	formatDate,
-	select
+	select,
+	editIcon
 } = require('./helpers/hbs');
-
-// Load Routes
-const index = require('./routes/index');
-const auth = require('./routes/auth');
-const papers = require('./routes/papers');
 
 // Global Promise map
 mongoose.Promise = global.Promise;
@@ -47,13 +40,23 @@ mongoose.connect(keys.mongoURI)
 	.then(() => console.log('MongoDB Connected'))
 	.catch(error => console.log('error: ',error));
 
+
+const app = express();
+const port = process.env.PORT || 5000;
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
+
+// Method override - Perform Post and Delete directly from HTML 
+app.use(methodOverride('_method'));
+
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
 	helpers: {
 		truncate: truncate,
 		stripTags: stripTags,
 		formatDate: formatDate,
-		select
+		select: select,
+		editIcon: editIcon
 	},
 	defaultLayout: 'main'
 }));
@@ -86,7 +89,7 @@ app.use('/auth', auth);
 app.use('/papers', papers);
 
 app.listen(port, () => {
-	console.log(`Server started on port ${port}`)
+	console.log(`Server started on port ${port}`);
 });
 
 

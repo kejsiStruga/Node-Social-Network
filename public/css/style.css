@@ -1,8 +1,15 @@
+html * {
+   font-weight:lighter;
+}
 /* Sticky foot by materialize css: http://materializecss.com/footer.html */
 body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+}
+
+body p {
+    text-align: justify;
 }
 
 main {

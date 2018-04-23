@@ -35,7 +35,8 @@ const User = mongoose.model('users');
 // Papers index
 router.get('/', (req, res) => {
     Paper.find({status: 'public'})
-        .populate('user') // populate the author with all data from users scheam
+        .populate('user') // populate the author with all data from users schema
+        .sort({date: 'desc'})
         .then(papers => {
             res.render('papers/index', {
                papers: papers 
@@ -86,9 +87,13 @@ router.get('/edit/:id', ensureAuthenticated, (req, res) => {
         _id: req.params.id
     })
     .then(paper => {
-        res.render('papers/edit',{
-            paper: paper
-        });
+        if(paper.user != req.user.id) {
+            res.redirect('/papers');
+        } else {
+            res.render('papers/edit',{
+                paper: paper
+            });
+        }
     });
 });
 
@@ -98,8 +103,12 @@ router.put('/:id', (req, res) => {
     Paper.findOne({
         _id: req.params.id
     })
+    .populate('user')
     .then(paper => {
         let allowComments;
+        res.render('papers/show',{
+            paper: paper
+        });
         if(req.body.allowComments) {
             allowComments = true;
         } else {
@@ -124,10 +133,25 @@ router.get('/show/:id', (req,res) => {
         _id: req.params.id
     })
     .populate('user')
+    .populate('comments.commentUser')
     .then(paper => {
-        res.render('papers/show',{
-            paper: paper
-        });
+        if(paper.status == 'public') {
+            res.render('papers/show',{
+                paper: paper
+            });
+        } else {
+            // we can see private papers only if they are our papers, even if the user copy-pastes the url!!
+            // res.redirect('/papers');
+            if(req.user) {
+                if(req.user.id == paper.user.id) {
+                    res.render('papers/show',{
+                        paper: paper
+                    });
+                }
+            } else {
+                res.redirect('/papers');
+            }
+        }
     });
 });
 
@@ -140,4 +164,52 @@ router.delete('/:id', (req,res) => {
         });
 });
 
+// Add A comment
+router.post('/comment/:id', (req, res) => {
+    Paper.findOne({
+        _id: req.params.id
+    })
+    .then(paper => {
+        const newComment = {
+            commentBody: req.body.commentBody,
+            commentUser: req.user.id
+        }
+        
+        // insert at the begging of the array!
+        paper.comments.unshift(newComment);
+
+        paper.save()
+            .then(paper => {
+                res.redirect(`/papers/show/${paper.id}`);
+            })
+    });
+});
+
+// List stories from a user
+router.get('/user/:userId', (req, res) => {
+    console.log('req: ', req);
+    console.log('USer: ', req.params.user);
+
+    Paper.find({user: req.params.userId, status: 'public'})
+        .populate('user')
+        .then(papers => {
+            res.render('papers/index', {
+                papers:papers
+            })
+        })
+});
+
+// My Papers
+router.get('/my', ensureAuthenticated, (req, res) => {
+    Paper.find({user: req.user.id})
+        .populate('user')
+        .then(papers => {
+            res.render('papers/index', {
+                papers: papers
+            })
+        })
+})
+
 module.exports = router; 
+
+

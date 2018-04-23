@@ -23,10 +23,12 @@ router.get('/verify', (req,res) => {
 });
 
 router.get('/logout', function(req, res) {
-    req.session.destroy(function(e){
-        req.logout();
-        res.redirect('/');
-    });
+  req.logout();
+  res.redirect('/');
+    // req.session.destroy(function(e){
+    //     req.logout();
+    //     res.redirect('/');
+    // });
 });
    
 module.exports = router;

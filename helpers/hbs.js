@@ -21,5 +21,16 @@ module.exports = {
     select: function(selected, options){
         return options.fn(this).replace( new RegExp(' value=\"' + selected + '\"'), '$& selected="selected"')
                 .replace( new RegExp('>' + selected + '</option>'), ' selected="selected"$&');
+    },
+    editIcon: function(paperUser, loggedUser, paperId, floating = true) {
+        if(paperUser == loggedUser) {
+            if (floating) {
+                return `<a href="/papers/edit/${paperId}" class="btn-floating halfway-fab red"><i class="fa fa-pencil"></i></a>`;
+            } else {
+                return `<a href="/papers/edit/${paperId}"><i class="fa fa-pencil"></i></a>`;
+            }
+        } else {
+            return '';
+        }
     }
 }

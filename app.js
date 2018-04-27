@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
+var favicon = require('serve-favicon');
 
 // Load user model; this line ShOULD be placed ahead of Passport load
 require('./models/users');
@@ -85,6 +86,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/auth', auth);
 app.use('/papers', papers);
+
+// Favicon
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 app.listen(port, () => {
 	console.log(`Server started on port ${port}`);

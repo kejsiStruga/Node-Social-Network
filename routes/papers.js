@@ -31,8 +31,8 @@ const { ensureAuthenticated, ensureGuest } = require('../helpers/auth');
 const mongoose = require('mongoose');
 const Paper = mongoose.model('papers');
 const User = mongoose.model('users');
+const stripTags = require('strip-tags');
 
-// const stripTags = require('striptags');
 // Papers index
 router.get('/', (req, res) => {
     Paper.find({status: 'public'})
@@ -40,7 +40,7 @@ router.get('/', (req, res) => {
         .sort({date: 'desc'})
         .then(papers => {
             res.render('papers/index', {
-               papers: stripTags(papers)
+               papers: papers
             });
         });
     // res.render('papers/index');

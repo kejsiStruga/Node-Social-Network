@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
+const stripTags = require('striptags');
 
 // Load user model; this line ShOULD be placed ahead of Passport load
 require('./models/users');

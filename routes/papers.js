@@ -32,6 +32,7 @@ const mongoose = require('mongoose');
 const Paper = mongoose.model('papers');
 const User = mongoose.model('users');
 
+// const stripTags = require('striptags');
 // Papers index
 router.get('/', (req, res) => {
     Paper.find({status: 'public'})
@@ -39,7 +40,7 @@ router.get('/', (req, res) => {
         .sort({date: 'desc'})
         .then(papers => {
             res.render('papers/index', {
-               papers: papers 
+               papers: stripTags(papers)
             });
         });
     // res.render('papers/index');
@@ -48,14 +49,13 @@ router.get('/', (req, res) => {
 // Add Papers form
 router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('papers/add');
-})
+});
 
 // Papers dashboard
 router.get('/dashboard', (req, res) => {
     res.render('papers/dashboard'); // res.render(<FilePath>)
 });
 
-// Process Add Paper
 router.post('/', (req, res) => {
     
     let allowComments; 
@@ -68,12 +68,12 @@ router.post('/', (req, res) => {
 
     const newPaper = {
         title: req.body.title,
-        body: req.body.body,
+        body: stripTags(req.body.body),
         status: req.body.status,
         allowComments: allowComments, 
         user: req.user.id
     }
-
+    
     new Paper(newPaper)
         .save()
         .then(paper => {
@@ -124,7 +124,7 @@ router.put('/:id', (req, res) => {
             .then(paper => {
                 res.redirect('/dashboard');
             });
-    })
+    });
 });
 
 // Show paper; column :id is the placeholder

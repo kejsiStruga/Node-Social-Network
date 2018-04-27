@@ -27,7 +27,6 @@ const keys = require('./config/keys');
 // Handlebars Helpers, which should be applied to the middleware
 const {
 	truncate,
-	stripTags,
 	formatDate,
 	select,
 	editIcon

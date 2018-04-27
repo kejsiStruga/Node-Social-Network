@@ -16,6 +16,10 @@ main {
     flex: 1 0 auto;
 }
 
+.card-content {
+    height: 18rem;
+}
+
 .nav-wrapper .fa-bars {
     font-size: 25px;
 }

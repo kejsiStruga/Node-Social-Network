@@ -32,6 +32,8 @@ const mongoose = require('mongoose');
 const Paper = mongoose.model('papers');
 const User = mongoose.model('users');
 const stripTags = require('strip-tags');
+const stripHtmlCharactersCustom = require('../helpers/strip-html-characters');
+const stringUtil = require('../helpers/string-util');
 
 // Papers index
 router.get('/', (req, res) => {
@@ -43,7 +45,6 @@ router.get('/', (req, res) => {
                papers: papers
             });
         });
-    // res.render('papers/index');
 });
 
 // Add Papers form
@@ -53,22 +54,40 @@ router.get('/add', ensureAuthenticated, (req, res) => {
 
 // Papers dashboard
 router.get('/dashboard', (req, res) => {
-    res.render('papers/dashboard'); // res.render(<FilePath>)
+    res.render('papers/dashboard');
 });
 
 router.post('/', (req, res) => {
     
     let allowComments; 
 
+    let reqBodyStrippedCharacters = 
+        stringUtil.allReplace(req.body.body, 
+            stripHtmlCharactersCustom.namedCharacterReferences,
+            stripHtmlCharactersCustom.replacementCharacters);
+
     if(req.body.allowComments) {
         allowComments = true;
     } else {
-        allowComments = false;
+        allowComments = false;  
     }
 
+    console.log(stripHtmlCharactersCustom.htmlTagsPattern);
+
+    console.log(stringUtil.replaceHtmlTags(req.body.title, 
+        ""+stripHtmlCharactersCustom.htmlTagsPattern));
+    
+    console.log(stringUtil.replaceHtmlTags(reqBodyStrippedCharacters, 
+        ""+stripHtmlCharactersCustom.htmlTagsPattern));
+
+    console.log(stringUtil);
+
+
     const newPaper = {
-        title: req.body.title,
-        body: stripTags(req.body.body),
+        title: stringUtil.replaceHtmlTags(req.body.title, 
+            stripHtmlCharactersCustom.htmlTagsPattern),
+        body: stringUtil.replaceHtmlTags(reqBodyStrippedCharacters, 
+            stripHtmlCharactersCustom.htmlTagsPattern),
         status: req.body.status,
         allowComments: allowComments, 
         user: req.user.id

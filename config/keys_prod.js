@@ -7,4 +7,4 @@ console.log(mongoURI)
 console.log(googleClientID)
 console.log(googleClientSecret)
 
-module.exports = mongoURI, googleClientID, googleClientSecret
+module.exports = { mongoURI, googleClientID, googleClientSecret }

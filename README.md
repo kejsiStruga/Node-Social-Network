@@ -17,5 +17,5 @@
 7. create the routes folder add the auth.js file
 
 
-## A version of the app can be found in: 
+### A version of the app can be found in: 
 https://whispering-depths-77074.herokuapp.com/

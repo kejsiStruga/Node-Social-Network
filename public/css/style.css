@@ -20,6 +20,10 @@ p {
     word-wrap: break-word;
 }
 
+.card-content {
+    word-wrap: break-word;
+}
+
 .card-content-title {
     font-weight: bold;
 }

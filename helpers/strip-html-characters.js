@@ -1,6 +1,6 @@
 module.exports = {
     namedCharacterReferences: [
-        "&nbsp;"
+        "&nbsp;<p>"
     ],
     replacementCharacters: [
         " "

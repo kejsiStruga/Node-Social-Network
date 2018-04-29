@@ -206,9 +206,6 @@ router.post('/comment/:id', (req, res) => {
 
 // List stories from a user
 router.get('/user/:userId', (req, res) => {
-    console.log('req: ', req);
-    console.log('USer: ', req.params.user);
-
     Paper.find({user: req.params.userId, status: 'public'})
         .populate('user')
         .then(papers => {

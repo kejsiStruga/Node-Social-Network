@@ -15,3 +15,7 @@
 5. Enable Google+ API
 6. create the config folder and add the keys
 7. create the routes folder add the auth.js file
+
+
+### A version of the app can be found in: 
+https://whispering-depths-77074.herokuapp.com/

@@ -3,7 +3,8 @@ module.exports = {
         "&nbsp;<p>"
     ],
     replacementCharacters: [
-        " "
+        ""
     ],
     htmlTagsPattern: "(<([^>]+)>)" 
+    // htmlTagsPattern: "(<([^>]+)>)" 
 }

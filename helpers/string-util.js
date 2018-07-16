@@ -6,6 +6,7 @@
  * 
  * Example: string="foo&nbsp;" => string now will be "foo "
  */
+// Check if its needed to be deleted
 function allReplace(string, charsToBeReplacedArr, replacementsArr) {
     var arrLength = charsToBeReplacedArr.length,    
         newString, 
@@ -22,6 +23,20 @@ function allReplace(string, charsToBeReplacedArr, replacementsArr) {
     return newString;
 }
 
+/**
+ * 
+ * @param {*} str Input data into materialize text field from user
+ */
+function strip_html_tags(str)
+{
+   if ((str===null) || (str===''))
+       return false;
+  else
+   str = str.toString();
+  return str.replace(/<[^>]*>/g, '');
+}
+
+// Check if its needed to be deleted
 function replaceHtmlTags(string, pattern) {
     var re = new RegExp(pattern,"ig"), 
         newString;
@@ -30,4 +45,4 @@ function replaceHtmlTags(string, pattern) {
     return newString;
 }
 
-module.exports = { allReplace, replaceHtmlTags };
+module.exports = { allReplace, replaceHtmlTags, strip_html_tags };

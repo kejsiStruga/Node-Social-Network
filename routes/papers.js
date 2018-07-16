@@ -10,8 +10,8 @@
     + Each entity should have its route file where we define the CRUD operations
 
     Also in each route file we should have the express and express.Router()
-*/
-/* Express --> 
+
+  Express --> 
     routing : refers to how an application's endpoint (URIs) respond to client requests;
     Routing is defined using methods of the Express *** app object *** that correspond to HTTP methods;
     app.get() app.post() etc 
@@ -61,27 +61,13 @@ router.post('/', (req, res) => {
     
     let allowComments; 
 
-    let reqBodyStrippedCharacters = 
-        stringUtil.allReplace(req.body.body, 
-            stripHtmlCharactersCustom.namedCharacterReferences,
-            stripHtmlCharactersCustom.replacementCharacters);
+    let reqBodyStrippedCharacters = stringUtil.strip_html_tags(req.body.body);
 
     if(req.body.allowComments) {
         allowComments = true;
     } else {
         allowComments = false;  
     }
-
-    console.log(stripHtmlCharactersCustom.htmlTagsPattern);
-
-    console.log(stringUtil.replaceHtmlTags(req.body.title, 
-        ""+stripHtmlCharactersCustom.htmlTagsPattern));
-    
-    console.log(stringUtil.replaceHtmlTags(reqBodyStrippedCharacters, 
-        ""+stripHtmlCharactersCustom.htmlTagsPattern));
-
-    console.log(stringUtil);
-
 
     const newPaper = {
         title: stringUtil.replaceHtmlTags(req.body.title, 

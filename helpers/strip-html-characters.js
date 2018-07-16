@@ -6,5 +6,4 @@ module.exports = {
         ""
     ],
     htmlTagsPattern: "(<([^>]+)>)" 
-    // htmlTagsPattern: "(<([^>]+)>)" 
 }

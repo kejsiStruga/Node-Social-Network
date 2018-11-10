@@ -18,4 +18,4 @@
 
 
 ### A version of the app can be found in: 
-https://whispering-depths-77074.herokuapp.com/
+https://paperpublisher.herokuapp.com

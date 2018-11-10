@@ -27,6 +27,7 @@ const keys = require('./config/keys');
 // Handlebars Helpers, which should be applied to the middleware
 const {
 	truncate,
+	stripTags,
 	formatDate,
 	select,
 	editIcon
@@ -36,7 +37,7 @@ const {
 mongoose.Promise = global.Promise;
 
 // Mongoose Connection Congif
-mongoose.connect(keys.mongoURI)
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
 	.then(() => console.log('MongoDB Connected'))
 	.catch(error => console.log('error: ',error));
 
@@ -53,6 +54,7 @@ app.use(methodOverride('_method'));
 app.engine('handlebars', exphbs({
 	helpers: {
 		truncate: truncate,
+		stripTags: stripTags,
 		formatDate: formatDate,
 		select: select,
 		editIcon: editIcon

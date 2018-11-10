@@ -31,9 +31,9 @@ const { ensureAuthenticated, ensureGuest } = require('../helpers/auth');
 const mongoose = require('mongoose');
 const Paper = mongoose.model('papers');
 const User = mongoose.model('users');
-const stripTags = require('strip-tags');
-const stripHtmlCharactersCustom = require('../helpers/strip-html-characters');
-const stringUtil = require('../helpers/string-util');
+// const stripTags = require('strip-tags');
+// const stripHtmlCharactersCustom = require('../helpers/strip-html-characters');
+// const stringUtil = require('../helpers/string-util');
 
 // Papers index
 router.get('/', (req, res) => {
@@ -61,7 +61,7 @@ router.post('/', (req, res) => {
     
     let allowComments; 
 
-    let reqBodyStrippedCharacters = stringUtil.strip_html_tags(req.body.body);
+    // let reqBodyStrippedCharacters = stringUtil.strip_html_tags(req.body.body);
 
     if(req.body.allowComments) {
         allowComments = true;
@@ -69,16 +69,24 @@ router.post('/', (req, res) => {
         allowComments = false;  
     }
 
+    // const newPaper = {
+    //     title: stringUtil.replaceHtmlTags(req.body.title, 
+    //         stripHtmlCharactersCustom.htmlTagsPattern),
+    //     body: stringUtil.replaceHtmlTags(reqBodyStrippedCharacters, 
+    //         stripHtmlCharactersCustom.htmlTagsPattern),
+    //     status: req.body.status,
+    //     allowComments: allowComments, 
+    //     user: req.user.id
+    // }
+    
     const newPaper = {
-        title: stringUtil.replaceHtmlTags(req.body.title, 
-            stripHtmlCharactersCustom.htmlTagsPattern),
-        body: stringUtil.replaceHtmlTags(reqBodyStrippedCharacters, 
-            stripHtmlCharactersCustom.htmlTagsPattern),
+        title: req.body.title,
+        body: req.body.body,
         status: req.body.status,
         allowComments: allowComments, 
         user: req.user.id
     }
-    
+
     new Paper(newPaper)
         .save()
         .then(paper => {
@@ -213,5 +221,3 @@ router.get('/my', ensureAuthenticated, (req, res) => {
 })
 
 module.exports = router; 
-
-

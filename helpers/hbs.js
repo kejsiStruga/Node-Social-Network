@@ -12,7 +12,8 @@ module.exports = {
 		return str;
   },
   stripTags: function(input){
-    return input.replace(/<(?:.|\n)*?>/gm, '');
+    var input_stripped = input.replace(/<[^>]*>?/g, '');
+    return input_stripped.replace(/<(?:.|\n|<a>)*?>/gm, '');
   },
   formatDate: function(date, format){
     return moment(date).format(format);
